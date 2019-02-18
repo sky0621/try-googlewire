@@ -22,7 +22,9 @@ func (e *env) Prepare() {
 
 // ------------------------------------------------------------------
 
-func NewRDBSetting()
+func NewRDBSetting() *RDBSetting {
+	return &RDBSetting{}
+}
 
 type RDBSetting struct {
 	User        string
