@@ -1,11 +1,11 @@
 package model
 
-type UserModel interface {
+type User struct {
+	ID   string
+	Name string
+	Mail string
 }
 
-type userModel struct {
-}
-
-func NewUser() UserModel {
-	return &userModel{}
+type UserCondition struct {
+	IDs []string
 }
