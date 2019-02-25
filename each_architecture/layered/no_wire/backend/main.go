@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/jinzhu/gorm"
 )
 
-// MEMO:
+// MEMO: ここにあるコードはプロダクションレベルのコードではありません。
 
 // MEMO: このシステムでは永続化方法はMySQLへの接続で行う。
 // ※接続先やある程度の接続パラメータは環境により動的に変更できるようにするが、
@@ -17,7 +19,10 @@ func main() {
 	fmt.Println(set)
 
 	// MySQLへの接続インスタンスを取得
-
+	db, err := gorm.Open("mysql", set.DataSourceStr)
+	if err != nil {
+		panic(err)
+	}
 }
 
 type MySQLSetting struct {
