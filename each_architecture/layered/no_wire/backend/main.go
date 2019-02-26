@@ -3,44 +3,28 @@ package main
 import (
 	"fmt"
 	"os"
+	"try-googlewire/each_architecture/layered/no_wire/backend/infrastructure/persistence"
 
-	"github.com/jinzhu/gorm"
+	"github.com/labstack/echo"
 )
 
-// MEMO: ここにあるコードはプロダクションレベルのコードではありません。
-
-// MEMO: このシステムでは永続化方法はMySQLへの接続で行う。
-// ※接続先やある程度の接続パラメータは環境により動的に変更できるようにするが、
-// 他のRDBならびにNoSQLへの変更におけるソース修正コストを最小限にすることまでは求めない。
+// Note: ここにあるコードはプロダクションレベルのコードではありません。
+// Note: ログ出力やエラーハンドリングなどプロダクションレベルで必要なコードは省略しています。
 
 func main() {
-	// 環境変数よりMySQL接続情報を取得
-	set := NewMySQLSetting()
-	fmt.Println(set)
+	// 環境変数より各種セットアップ情報を取得
+	env := ReadEnv()
 
-	// MySQLへの接続インスタンスを取得
-	db, err := gorm.Open("mysql", set.DataSourceStr)
+	// 永続化層アクセス用のマネージャを生成
+	m, err := persistence.NewManager(env.m.dataSourceStr())
 	if err != nil {
 		panic(err)
 	}
-}
+	fmt.Println(m.Ping())
 
-type MySQLSetting struct {
-	DataSourceStr string
-	MaxIdleConns  int
-	MaxOpenConns  int
-}
+	// https://echo.labstack.com/guide
+	e := echo.New()
 
-func NewMySQLSetting() MySQLSetting {
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASS")
-	instance := os.Getenv("DB_INSTANCE")
-	dbName := os.Getenv("DB_NAME")
-	set := MySQLSetting{
-		DataSourceStr: fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-			user, password, instance, dbName),
-	}
-	return set
 }
 
 // 本来なら環境変数は各環境にて事前（もしくはCloudであればインスタンスセットアップ時？）にセットアップするけど、
