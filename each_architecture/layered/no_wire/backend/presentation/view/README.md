@@ -1,3 +1,5 @@
-# try-googlewire/each_architecture/layered/no_wire/backend/presentation/view
+# view
 
 APIコールするフロントエンドを実装する。
+
+MVC+Sにおける「ビュー」層

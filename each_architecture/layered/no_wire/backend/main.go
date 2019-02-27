@@ -1,11 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"os"
-	"try-googlewire/each_architecture/layered/no_wire/backend/infrastructure/persistence"
-
-	"github.com/labstack/echo"
 )
 
 // Note: ここにあるコードはプロダクションレベルのコードではありません。
@@ -15,21 +11,19 @@ func main() {
 	// 環境変数より各種セットアップ情報を取得
 	env := ReadEnv()
 
-	// 永続化層アクセス用のマネージャを生成
-	m, err := persistence.NewManager(env.m.dataSourceStr())
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(m.Ping())
+	// MEMO: toml等に書いた設定の読み込みも必要になるかも
 
-	// https://echo.labstack.com/guide
-	e := echo.New()
+	// MEMO: 各種メッセージの読み込みも必要になるかも
 
+	// APIサーバのセットアップ
+	NewServer(env).Serve()
 }
 
 // 本来なら環境変数は各環境にて事前（もしくはCloudであればインスタンスセットアップ時？）にセットアップするけど、
 // 今回は基本的にローカル環境での試行用なので、明示的にここでセットしてしまう。
 func init() {
+	os.Setenv("API_KEY", "dummy")
+
 	os.Setenv("DB_USER", "localuser")
 	os.Setenv("DB_PASS", "localpass")
 	os.Setenv("DB_INSTANCE", "127.0.0.1:3306")

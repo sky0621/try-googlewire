@@ -6,7 +6,12 @@ import (
 )
 
 type env struct {
-	m mysql
+	sec secure
+	m   mysql
+}
+
+type secure struct {
+	apiKey string
 }
 
 type mysql struct {
@@ -23,9 +28,15 @@ func (m mysql) dataSourceStr() string {
 
 func ReadEnv() env {
 	e := env{}
+
+	// secure
+	e.sec.apiKey = os.Getenv("API_KEY")
+
+	// mysql
 	e.m.user = os.Getenv("DB_USER")
 	e.m.password = os.Getenv("DB_PASS")
 	e.m.instance = os.Getenv("DB_INSTANCE")
 	e.m.dbName = os.Getenv("DB_NAME")
+
 	return e
 }
