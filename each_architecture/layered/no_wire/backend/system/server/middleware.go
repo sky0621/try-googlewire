@@ -1,43 +1,15 @@
-package main
+package server
 
 import (
 	"fmt"
 	"net/http"
-	"try-googlewire/each_architecture/layered/no_wire/backend/infrastructure/persistence"
 
-	firebase "firebase.google.com/go"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
+	"github.com/labstack/echo/middleware"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 )
-
-type Server interface {
-	Serve()
-}
-
-type server struct {
-	env
-}
-
-func NewServer(e env) Server {
-	// 永続化層アクセス用のマネージャを生成
-	m, err := persistence.NewManager(e.m.dataSourceStr())
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(m.Ping())
-
-	return &server{env: e}
-}
-
-func (s *server) Serve() {
-	// https://echo.labstack.com/guide
-	e := echo.New()
-
-	e.Logger.Fatal(e.Start(":8080"))
-}
 
 // https://echo.labstack.com/middleware
 func setupBasic(e *echo.Echo, apiKey string) {
@@ -101,7 +73,6 @@ func SetupCustom(e *echo.Echo, appLgr logger.AppLogger, db *gorm.DB, firebaseApp
 	e.Use(requestIDMiddleware())
 	e.Use(customLoggerMiddleware(appLgr))
 	e.Use(gormDBMiddleware(db))
-	e.Use(firebaseAppMiddleware(firebaseApp))
 }
 
 // CustomContext ... Cloud SQLアクセッサ等をcontrollerで受け取れるよう、Echoコンテキストを拡張
