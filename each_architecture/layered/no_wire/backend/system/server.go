@@ -1,9 +1,6 @@
 package system
 
 import (
-	"fmt"
-	"try-googlewire/each_architecture/layered/no_wire/backend/infrastructure/persistence"
-
 	"github.com/labstack/echo"
 )
 
@@ -12,18 +9,18 @@ type Server interface {
 }
 
 type server struct {
-	env
+	set Settings
 }
 
-func NewServer(e env) Server {
-	// 永続化層アクセス用のマネージャを生成
-	m, err := persistence.NewManager(e.m.dataSourceStr())
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(m.Ping())
+func NewServer(set Settings) Server {
+	//// 永続化層アクセス用のマネージャを生成
+	//m, err := persistence.NewManager(e.m.dataSourceStr())
+	//if err != nil {
+	//	panic(err)
+	//}
+	//fmt.Println(m.Ping())
 
-	return &server{env: e}
+	return &server{set: set}
 }
 
 func (s *server) Serve() {

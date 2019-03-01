@@ -2,18 +2,15 @@ package main
 
 import (
 	"os"
+	"try-googlewire/each_architecture/layered/no_wire/backend/system"
 )
 
 // Note: ここにあるコードはプロダクションレベルのコードではありません。
 // Note: ログ出力やエラーハンドリングなどプロダクションレベルで必要なコードは省略しています。
 
 func main() {
-	// 環境変数より各種セットアップ情報を取得
-	env := ReadEnv()
-
-	// MEMO: toml等に書いた設定の読み込みも必要になるかも
-
-	// MEMO: 各種メッセージの読み込みも必要になるかも
+	// システムとしての設定情報を取得
+	set := system.SetUp()
 
 	// APIサーバのセットアップ
 	NewServer(env).Serve()

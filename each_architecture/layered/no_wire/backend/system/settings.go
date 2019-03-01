@@ -1,9 +1,13 @@
 package system
 
-// Settings ...
-type Settings struct {
-	S Secure
-	M MySQL
+// MEMO: システム全体の設定情報を担う。
+
+type Settings interface {
+}
+
+type settings struct {
+	s Secure
+	m MySQL
 }
 
 type Secure struct {
@@ -22,6 +26,8 @@ type MySQL struct {
 // ・環境変数の読み込み
 // ・設定ファイルの読み込み
 // ・
-func ReadSettings() Settings {
+func SetUp() Settings {
+	s := &settings{}
 
+	return s
 }
