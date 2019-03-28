@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// システムとしての設定情報を取得
-	set := system.SetUp()
+	settings := system.SetUp()
 
 	// APIサーバのセットアップ
 	NewServer(env).Serve()

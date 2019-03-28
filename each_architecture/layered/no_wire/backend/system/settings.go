@@ -2,15 +2,25 @@ package system
 
 // MEMO: システム全体の設定情報を担う。
 
+func newSettings() Settings {
+	return &settings{}
+}
+
 type Settings interface {
+	GetSecuritySettings() SecuritySettings
+	GetPersistenceSettings()
 }
 
 type settings struct {
-	s Secure
+	s SecuritySettings
 	m MySQL
 }
 
-type Secure struct {
+type SecuritySettings interface {
+	GetAPIKey() string
+}
+
+type securitySettings struct {
 	ApiKey string
 }
 
